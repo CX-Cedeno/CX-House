@@ -1,23 +1,30 @@
-import os
+using System;
+using System.Data.SqlClient;
+using System.IO;
 
-def unsafe_file_read():
-    # Vulnerabilidad: lectura de archivos sin validación de ruta
-    file_name = input("Introduce el nombre del archivo: ")
-    with open(file_name, 'r') as file:
-        content = file.read()
-    return content
+class VulnerableApp
+{
+    // 1. Inyección SQL
+    public static void SqlInjectionExample(string username)
+    {
+        string connectionString = "your_connection_string";
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = $"SELECT * FROM Users WHERE Username = '{username}'"; // Vulnerable a inyección SQL
+            SqlCommand command = new SqlCommand(query, connection);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine(reader["Username"]);
+            }
+        }
+    }
 
-def unsanitized_user_input():
-    # Vulnerabilidad: uso de entrada del usuario sin sanitización
-    user_input = input("Introduce tu nombre: ")
-    print("Hola, " + user_input + "!")
-
-def sql_injection_example(username):
-    # Vulnerabilidad: inyección SQL
-    query = f"SELECT * FROM users WHERE username = '{username}'"
-    print("Consulta SQL: ", query)
-
-if __name__ == "__main__":
-    unsafe_file_read()
-    unsanitized_user_input()
-    sql_injection_example("admin' --")
+    // 2. Exposición de datos sensibles
+    public static void ReadSensitiveFile()
+    {
+        string filePath = Console.ReadLine(); // Lectura de archivos sin validación
+        using (StreamReader reader = new StreamReader(filePath))
+        {
+            Console.Wr
