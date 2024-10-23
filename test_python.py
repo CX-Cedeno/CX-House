@@ -1,12 +1,13 @@
 import os
 
-def unsafe_file_read(file_name):
+def unsafe_file_read():
     # Vulnerabilidad: lectura de archivos sin validación de ruta
+    file_name = input("Introduce el nombre del archivo: ")
     with open(file_name, 'r') as file:
         content = file.read()
     return content
 
-def unsanitized_input():
+def unsanitized_user_input():
     # Vulnerabilidad: uso de entrada del usuario sin sanitización
     user_input = input("Introduce tu nombre: ")
     print("Hola, " + user_input + "!")
@@ -17,6 +18,6 @@ def sql_injection_example(username):
     print("Consulta SQL: ", query)
 
 if __name__ == "__main__":
-    unsafe_file_read("file.txt")
-    unsanitized_input()
+    unsafe_file_read()
+    unsanitized_user_input()
     sql_injection_example("admin' --")
